@@ -10,7 +10,9 @@ from .timelapse import TimelapseRecorder
 
 def save_run(record: Any, recorder: TimelapseRecorder | None = None) -> str:
     """Build GIFs and postcard, store everything. Returns run_id."""
-    if hasattr(record, "__dict__"):
+    if hasattr(record, "to_dict"):
+        data = record.to_dict()
+    elif hasattr(record, "__dict__"):
         data = {
             "run_id": getattr(record, "run_id", None),
             "created_at": getattr(record, "created_at", ""),
@@ -43,7 +45,7 @@ def save_run(record: Any, recorder: TimelapseRecorder | None = None) -> str:
                 except Exception:
                     pass
 
-    winner = next(iter((data.get("awards") or {}).values()), None)
+    winner = (data.get("winners") or {}).get("best_final")
     postcard = create_postcard(data, target_img, result_images, winner)
 
     panel_gifs, combined = {}, None
@@ -63,6 +65,7 @@ def save_run(record: Any, recorder: TimelapseRecorder | None = None) -> str:
         record_data=data,
         target_img=target_img,
         result_images=result_images,
+        shape_dicts=getattr(record, "shapes", None),
         history_csvs=history_csvs,
         timelapse_gifs=panel_gifs,
         combined_gif=combined,
