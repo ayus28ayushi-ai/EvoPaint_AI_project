@@ -1,0 +1,26 @@
+{
+  "background": "#1a1c2c",
+  "background_alt": "#262b44",
+  "panel": "#333c57",
+  "panel_border": "#566c86",
+  "text": "#f4f4f4",
+  "text_dim": "#94b0c2",
+  "accent": "#ffcd75",
+  "accent_text": "#1a1c2c",
+  "good": "#a7f070",
+  "bad": "#ef7d57",
+  "grid": "#41486a",
+  "button": "#41486a",
+  "button_hover": "#566c86",
+  "button_disabled": "#2b3045",
+  "slider_track": "#566c86",
+  "slider_fill": "#ffcd75",
+  "name": "Retro 8-bit",
+  "corner_radius": 0,
+  "line_colors": [
+    "#41a6f6",
+    "#ffcd75",
+    "#a7f070",
+    "#ef7d57"
+  ]
+}

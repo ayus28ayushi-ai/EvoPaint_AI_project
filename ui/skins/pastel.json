@@ -1,0 +1,26 @@
+{
+  "background": "#fdf4f7",
+  "background_alt": "#f6e7ef",
+  "panel": "#ffffff",
+  "panel_border": "#ead3df",
+  "text": "#4a3b4f",
+  "text_dim": "#8f7d96",
+  "accent": "#b79ced",
+  "accent_text": "#ffffff",
+  "good": "#7bcf9c",
+  "bad": "#f08fa0",
+  "grid": "#f1e2ea",
+  "button": "#f6e7ef",
+  "button_hover": "#efd8e5",
+  "button_disabled": "#f9eef3",
+  "slider_track": "#ead3df",
+  "slider_fill": "#b79ced",
+  "name": "Pastel",
+  "corner_radius": 14,
+  "line_colors": [
+    "#b79ced",
+    "#ffb38a",
+    "#7bcf9c",
+    "#7cc4f2"
+  ]
+}

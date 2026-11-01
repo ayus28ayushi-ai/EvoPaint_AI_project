@@ -1,0 +1,26 @@
+{
+  "background": "#06202e",
+  "background_alt": "#0a2c40",
+  "panel": "#0d3550",
+  "panel_border": "#1c5878",
+  "text": "#e6f7ff",
+  "text_dim": "#86b5c9",
+  "accent": "#2ec4b6",
+  "accent_text": "#002a30",
+  "good": "#5eead4",
+  "bad": "#fb7185",
+  "grid": "#134660",
+  "button": "#12405c",
+  "button_hover": "#1a5578",
+  "button_disabled": "#0b2d42",
+  "slider_track": "#1c5878",
+  "slider_fill": "#2ec4b6",
+  "name": "Ocean",
+  "corner_radius": 10,
+  "line_colors": [
+    "#2ec4b6",
+    "#7dd3fc",
+    "#fcd34d",
+    "#f9a8d4"
+  ]
+}

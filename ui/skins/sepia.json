@@ -1,0 +1,26 @@
+{
+  "background": "#efe3cc",
+  "background_alt": "#e4d4b5",
+  "panel": "#f7eedc",
+  "panel_border": "#c8b48a",
+  "text": "#3b2a1a",
+  "text_dim": "#7a6448",
+  "accent": "#8b5a2b",
+  "accent_text": "#fff8ea",
+  "good": "#5c7a2e",
+  "bad": "#a8402a",
+  "grid": "#dccaa4",
+  "button": "#e4d4b5",
+  "button_hover": "#d6c39c",
+  "button_disabled": "#ece0c6",
+  "slider_track": "#cdb98f",
+  "slider_fill": "#8b5a2b",
+  "name": "Sepia",
+  "corner_radius": 8,
+  "line_colors": [
+    "#8b5a2b",
+    "#b5651d",
+    "#5c7a2e",
+    "#7a3b2e"
+  ]
+}

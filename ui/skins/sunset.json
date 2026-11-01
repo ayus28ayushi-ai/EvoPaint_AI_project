@@ -1,0 +1,26 @@
+{
+  "background": "#1e1028",
+  "background_alt": "#2a1636",
+  "panel": "#331a42",
+  "panel_border": "#5a2d62",
+  "text": "#fff1e6",
+  "text_dim": "#c9a0b8",
+  "accent": "#ff7a45",
+  "accent_text": "#2a0e1a",
+  "good": "#ffd166",
+  "bad": "#ff4d6d",
+  "grid": "#43224f",
+  "button": "#40204f",
+  "button_hover": "#55306a",
+  "button_disabled": "#2c1638",
+  "slider_track": "#5a2d62",
+  "slider_fill": "#ff7a45",
+  "name": "Sunset",
+  "corner_radius": 10,
+  "line_colors": [
+    "#ff7a45",
+    "#ffd166",
+    "#c77dff",
+    "#ff4d6d"
+  ]
+}

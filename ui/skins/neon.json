@@ -1,0 +1,26 @@
+{
+  "background": "#0b0b14",
+  "background_alt": "#12121f",
+  "panel": "#151527",
+  "panel_border": "#2d2d52",
+  "text": "#eaf6ff",
+  "text_dim": "#7f8bb3",
+  "accent": "#00f0ff",
+  "accent_text": "#001018",
+  "good": "#39ff14",
+  "bad": "#ff2e63",
+  "grid": "#22223d",
+  "button": "#1d1d36",
+  "button_hover": "#2a2a4d",
+  "button_disabled": "#14142a",
+  "slider_track": "#2d2d52",
+  "slider_fill": "#00f0ff",
+  "name": "Neon",
+  "corner_radius": 6,
+  "line_colors": [
+    "#00f0ff",
+    "#ff2e97",
+    "#39ff14",
+    "#ffe600"
+  ]
+}
