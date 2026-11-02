@@ -10,7 +10,7 @@ from typing import Any
 # file is run alone) we fall back to tiny local copies with the SAME field names
 # (Contract 5.5 and 5.7). Once the contract package exists, this block can be deleted.
 try:  # pragma: no cover - depends on the repository state
-    from contracts.definitions import ActionSpec, ParamSpec, Snapshot
+    from contracts.definitions import ActionSpec, Algorithm, ParamSpec, Snapshot
 except ImportError:
     @dataclass
     class ParamSpec:
@@ -50,7 +50,7 @@ except ImportError:
         elapsed_seconds: float = 0.0  # filled in by the Session
 
 
-class SimulatedAnnealing:
+class SimulatedAnnealing(Algorithm):
     # Class attributes required by the contract (6.2)
     id = "simulated_annealing"
     display_name = "Simulated Annealing"

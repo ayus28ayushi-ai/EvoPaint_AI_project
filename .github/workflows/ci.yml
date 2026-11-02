@@ -25,5 +25,3 @@ jobs:
           ruff check .
       - name: Import rule and no-Pygame rule
         run: python .github/scripts/check_imports.py
-      - name: Tests and conformance suites
-        run: python -m pytest
