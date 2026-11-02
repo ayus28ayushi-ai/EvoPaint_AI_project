@@ -1,0 +1,25 @@
+# Replace the usernames with the real GitHub handles.
+* @m2-user
+/contracts/ @m1-user @m2-user @m3-user @m4-user
+/engine/ @m1-user
+/algorithms/hill_climbing.py @m1-user
+/algorithms/stochastic_hc.py @m2-user
+/algorithms/simulated_annealing.py @m3-user
+/algorithms/beam_search.py @m4-user
+/session/ @m2-user
+/ui/ @m3-user
+/main.py @m3-user
+/assets/icons/ @m3-user
+/media/ @m4-user
+/assets/fonts/ @m4-user
+/samples/images/ @m4-user
+/docs/ @m4-user
+/.github/ @m2-user
+/tests/engine/ @m1-user
+/tests/session/ @m2-user
+/tests/ui/ @m3-user
+/tests/media/ @m4-user
+/tests/algorithms/test_hill_climbing.py @m1-user
+/tests/algorithms/test_stochastic_hc.py @m2-user
+/tests/algorithms/test_simulated_annealing.py @m3-user
+/tests/algorithms/test_beam_search.py @m4-user
