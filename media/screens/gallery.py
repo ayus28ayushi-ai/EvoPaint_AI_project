@@ -16,6 +16,10 @@ class GalleryScreen:
         self.runs = list_runs()
         self.selected = 0
 
+    def on_enter(self, payload=None) -> None:
+        self.runs = list_runs()
+        self.selected = min(self.selected, max(0, len(self.runs) - 1))
+
     def handle_events(self, events: list) -> dict | None:
         if pygame is None:
             return None
