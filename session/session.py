@@ -38,7 +38,7 @@ from session.scoring import build_outcome, pick_awards, pick_winners
 
 log = logging.getLogger(__name__)
 
-TICK_LIMIT = 0.025
+TICK_LIMIT = 0.06
 CHUNK = 50
 SPEED_RANGE = (50.0, 10000.0)
 EVENT_INTERVAL = 1.0

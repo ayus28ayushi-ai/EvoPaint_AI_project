@@ -12,9 +12,9 @@ from media.gallery import delete_run, list_runs
 
 class GalleryScreen:
     screen_id = "gallery"
-    ICON = 88          # thumbnail size
+    ICON = 140         # thumbnail size
     PAD = 18
-    ROW_H = 110
+    ROW_H = 170
 
     def __init__(self) -> None:
         self.runs = list_runs()
@@ -69,11 +69,11 @@ class GalleryScreen:
         if pygame is None:
             return
         surface.fill((25, 25, 40))
-        font = pygame.font.SysFont("Arial", 24)
-        small = pygame.font.SysFont("Arial", 18)
-        tiny = pygame.font.SysFont("Arial", 15)
+        font = pygame.font.SysFont("Arial", 40)
+        small = pygame.font.SysFont("Arial", 30)
+        tiny = pygame.font.SysFont("Arial", 22)
 
-        surface.blit(font.render("Gallery", True, (220, 220, 255)), (30, 18))
+        surface.blit(font.render("Gallery", True, (220, 220, 255)), (30, 12))
 
         if not self.runs:
             surface.blit(small.render("No runs yet. Finish a painting to see it here.", True, (160, 160, 180)), (30, 80))
@@ -107,15 +107,15 @@ class GalleryScreen:
             tx = ix + self.ICON + 16
             name = run["run_id"]
             # show shorter name if very long
-            if len(name) > 28:
-                name = name[:25] + "..."
+            if len(name) > 22:
+                name = name[:19] + "..."
             color = (100, 180, 255) if selected else (200, 200, 210)
-            surface.blit(small.render(name, True, color), (tx, y + 12))
+            surface.blit(small.render(name, True, color), (tx, y + 30))
             theme = run.get("theme_id", "")
-            surface.blit(tiny.render(f"theme: {theme}", True, (140, 140, 160)), (tx, y + 42))
+            surface.blit(tiny.render(f"theme: {theme}", True, (140, 140, 160)), (tx, y + 80))
             y += self.ROW_H
 
         # Instructions – bottom
         help1 = "← →  or  A D   select     Enter open     Del delete     Esc home"
         help_surf = tiny.render(help1, True, (130, 130, 150))
-        surface.blit(help_surf, (30, surface.get_height() - 32))
+        surface.blit(help_surf, (30, surface.get_height() - 38))

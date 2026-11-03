@@ -62,7 +62,7 @@ class SimulatedAnnealing(Algorithm):
     CALIBRATION_SAMPLES = 60       # sample moves used to calibrate the start temperature
     TARGET_ACCEPT = 0.8            # a typical worse move is accepted 80% of the time at the start
     REHEAT_FRACTION = 0.5          # "reheat" jumps back to 50% of the start temperature
-    MIN_TEMPERATURE = 1e-9         # never let T hit zero (avoids division by zero)
+    MIN_TEMPERATURE = 0.001        # frozen below this until the user reheats
 
     # ---------------------------------------------------------------- contract metadata
     @staticmethod
@@ -160,6 +160,9 @@ class SimulatedAnnealing(Algorithm):
         step_scale = self.params["step_scale"]
 
         while spent < budget_evaluations:
+            if self.temperature <= self.MIN_TEMPERATURE:   # frozen: stop searching until Reheat
+                self.evaluations += budget_evaluations - spent
+                break
             proposal = self.problem.propose(self.state, self.rng, step_scale)
             spent += 1
             self.evaluations += 1

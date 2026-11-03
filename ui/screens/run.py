@@ -238,13 +238,15 @@ class RunScreen:
             self.ctx.audio.on_event(event)                            # M4: sounds
             self.ctx.effects.on_event(event, cell)                    # M4: confetti over this panel
             name = self.names.get(panel, "Panel")
+            level = get(event, "level") or get(get(event, "payload"), "level")
             if kind in ("milestone_reached", "shapes_injected"):
                 self.chart.markers.append({"type": kind, "panel": panel, "evaluations": get(event, "evaluations", 0),
-                                           "level": get(event, "level")})
+                                           "level": level})
             if kind == "milestone_reached":
-                self._toast(f"{name} reached {get(event, 'level')}%!", "good")
+                self._toast(f"{name} reached {level}%!", "good")
             elif kind == "shapes_injected":
-                self._toast(f"{get(event, 'count', 50)} random shapes injected into {name}", "bad")
+                count = get(event, "count") or get(get(event, "payload"), "count", 50)
+                self._toast(f"{count} random shapes injected into {name}", "bad")
             elif kind == "leader_changed":
                 self._toast(f"{self.names.get(get(event, 'new_panel'), name)} takes the lead")
             elif kind == "panel_throttled":
