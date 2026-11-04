@@ -14,33 +14,14 @@ class EntryScreen:
 
     def __init__(self, run_id: str | None = None) -> None:
         self.run_id = run_id
-        self.record = None
-        self.folder = None
-        self.postcard = None
-        if run_id:
-            self._load(run_id)
-
-    def _load(self, run_id: str) -> None:
-        self.run_id = run_id
-        self.record = load_run(run_id)
-        self.folder = get_run_folder(run_id)
+        self.record = load_run(run_id) if run_id else None
+        self.folder = get_run_folder(run_id) if run_id else None
         self.postcard = None
         if self.folder and (self.folder / "postcard.png").exists() and pygame:
             try:
                 self.postcard = pygame.image.load(str(self.folder / "postcard.png"))
             except Exception:
                 pass
-
-    def on_enter(self, payload=None) -> None:
-        run_id = None
-        if isinstance(payload, dict):
-            run_id = payload.get("run_id")
-        elif isinstance(payload, str):
-            run_id = payload
-        elif hasattr(payload, "run_id"):
-            run_id = payload.run_id
-        if run_id:
-            self._load(run_id)
 
     def handle_events(self, events: list) -> dict | None:
         if pygame is None:
