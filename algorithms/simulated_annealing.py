@@ -10,7 +10,7 @@ from typing import Any
 # file is run alone) we fall back to tiny local copies with the SAME field names
 # (Contract 5.5 and 5.7). Once the contract package exists, this block can be deleted.
 try:  # pragma: no cover - depends on the repository state
-    from contracts.definitions import ActionSpec, ParamSpec, Snapshot
+    from contracts.definitions import ActionSpec, Algorithm, ParamSpec, Snapshot
 except ImportError:
     @dataclass
     class ParamSpec:
@@ -50,7 +50,7 @@ except ImportError:
         elapsed_seconds: float = 0.0  # filled in by the Session
 
 
-class SimulatedAnnealing:
+class SimulatedAnnealing(Algorithm):
     # Class attributes required by the contract (6.2)
     id = "simulated_annealing"
     display_name = "Simulated Annealing"
@@ -62,7 +62,7 @@ class SimulatedAnnealing:
     CALIBRATION_SAMPLES = 60       # sample moves used to calibrate the start temperature
     TARGET_ACCEPT = 0.8            # a typical worse move is accepted 80% of the time at the start
     REHEAT_FRACTION = 0.5          # "reheat" jumps back to 50% of the start temperature
-    MIN_TEMPERATURE = 1e-9         # never let T hit zero (avoids division by zero)
+    MIN_TEMPERATURE = 0.001        # frozen below this until the user reheats
 
     # ---------------------------------------------------------------- contract metadata
     @staticmethod
@@ -160,6 +160,9 @@ class SimulatedAnnealing:
         step_scale = self.params["step_scale"]
 
         while spent < budget_evaluations:
+            if self.temperature <= self.MIN_TEMPERATURE:   # frozen: stop searching until Reheat
+                self.evaluations += budget_evaluations - spent
+                break
             proposal = self.problem.propose(self.state, self.rng, step_scale)
             spent += 1
             self.evaluations += 1

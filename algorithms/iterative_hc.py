@@ -1,10 +1,9 @@
 from __future__ import annotations
 import random
-from typing import Any
-from types import SimpleNamespace
+from contracts.definitions import ActionSpec, Algorithm, ParamSpec, Snapshot
 
 
-class IterativeHillClimbing:
+class IterativeHillClimbing(Algorithm):
     id = "iterative_hc"
     display_name = "Iterative Hill Climbing"
     description = "Hill climbing with random restarts"
@@ -12,22 +11,22 @@ class IterativeHillClimbing:
     @staticmethod
     def param_specs():
         return [
-            {"name": "step_scale", "label": "Step size", "kind": "float",
-             "minimum": 0.01, "maximum": 1.0, "default": 0.3, "step": 0.01,
-             "scale": "log", "group": "algorithm", "help_text": "Mutation size"},
-            {"name": "restart_after", "label": "Restart after", "kind": "int",
-             "minimum": 50, "maximum": 5000, "default": 500, "step": 50,
-             "scale": "linear", "group": "algorithm", "help_text": "Evals without improvement before restart"},
+            ParamSpec(name="step_scale", label="Step size", kind="float",
+                      minimum=0.01, maximum=1.0, default=0.3, step=0.01,
+                      scale="log", group="algorithm", help_text="Mutation size"),
+            ParamSpec(name="restart_after", label="Restart after", kind="int",
+                      minimum=50, maximum=5000, default=500, step=50,
+                      scale="linear", group="algorithm", help_text="Evals without improvement before restart"),
         ]
 
     @staticmethod
     def action_specs():
-        return [{"name": "restart", "label": "Restart now", "help_text": "Force restart"}]
+        return [ActionSpec(name="restart", label="Restart now", help_text="Force restart")]
 
-    def __init__(self, problem, seed: int, params: dict):
+    def __init__(self, problem, seed: int, params: dict | None = None):
         self.problem = problem
         self.rng = random.Random(seed)
-        self.params = dict(params)
+        self.params = dict(params or {})
         self.current = problem.initial_state()
         self.current_cost = problem.evaluate(self.current)
         self.best = self.current
@@ -75,7 +74,7 @@ class IterativeHillClimbing:
         self.no_improve = 0
 
     def current_snapshot(self):
-        return SimpleNamespace(
+        return Snapshot(
             algorithm_id=self.id,
             iteration=self.iterations,
             evaluations=self.evaluations,
@@ -89,8 +88,6 @@ class IterativeHillClimbing:
             accepted_total=self.accepted,
             worse_accepted_total=self.worse_accepted,
             extras={"no_improve": self.no_improve},
-            elapsed_seconds=0.0,
-            panel_index=0,
         )
 
     def _restart(self):

@@ -27,6 +27,9 @@ class Audio:
             return None
         t = np.linspace(0, duration, int(22050 * duration), False)
         wave = (np.sin(2 * np.pi * freq * t) * 32767 * vol).astype(np.int16)
+        channels = pygame.mixer.get_init()[2] if pygame.mixer.get_init() else 1
+        if channels == 2:
+            wave = np.column_stack((wave, wave))
         return pygame.sndarray.make_sound(wave)
 
     def on_event(self, event: Any) -> None:

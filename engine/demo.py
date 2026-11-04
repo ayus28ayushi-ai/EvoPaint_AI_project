@@ -22,7 +22,7 @@ def main(argv: list | None = None) -> None:
     """Paint for N evaluations and save out/engine_demo.png (target | painting)."""
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     a = list(sys.argv[1:] if argv is None else argv)
-    path = a[0] if a else "tests/engine/data/m1_test_target.png"
+    path = a[0] if a else "samples/images/circle_square.png"
     theme = a[1] if len(a) > 1 else "full_color"
     total = int(a[2]) if len(a) > 2 else 20000
     problem = create_problem(path, ShapeConfig(), theme, seed=1)
