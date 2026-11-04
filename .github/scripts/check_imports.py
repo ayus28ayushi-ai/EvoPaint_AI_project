@@ -6,7 +6,7 @@ import ast
 import sys
 from pathlib import Path
 
-# package -> {public name: domains allowed to import it}
+
 PUBLIC = {
     "engine": {
         "create_problem": {"session"},
