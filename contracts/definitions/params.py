@@ -1,4 +1,5 @@
-
+"""ParamSpec and ActionSpec (contract 5.5). Owner: M3 - PLACEHOLDER with the exact contract names;
+if M3 pushes their own version, keep theirs."""
 from __future__ import annotations
 
 from dataclasses import dataclass
