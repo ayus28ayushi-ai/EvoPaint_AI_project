@@ -1,4 +1,5 @@
-pygame-ce
+pygame>=2.5.0
 Pillow>=10.0.0
 numpy>=1.24.0
-matplotlib
+pytest>=7.4.0
+ruff>=0.1.0

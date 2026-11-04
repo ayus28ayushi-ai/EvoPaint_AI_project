@@ -42,6 +42,13 @@ def save_run_folder(
         for i, csv in history_csvs.items():
             (folder / f"history_{i}.csv").write_text(csv)
 
+    if timelapse_gifs:
+        for i, p in timelapse_gifs.items():
+            if p.exists():
+                shutil.copy(p, folder / f"timelapse_{i}.gif")
+    if combined_gif and combined_gif.exists():
+        shutil.copy(combined_gif, folder / "timelapse_combined.gif")
+
     if postcard_img:
         postcard_img.save(folder / "postcard.png")
 
