@@ -1,8 +1,4 @@
-"""Fake Session that scripts a run and accepts every command (contract 11).
 
-Owner: M2. Built on FakeAlgorithm, so it needs no engine, images or Pygame.
-The RunRecord here is PROVISIONAL: M4 owns the real layout (Section 5.14).
-"""
 
 from __future__ import annotations
 
