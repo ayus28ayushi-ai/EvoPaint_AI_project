@@ -1,12 +1,10 @@
-"""CI check: domain import rule (contract Section 4) and the no-Pygame rule."""
-
 from __future__ import annotations
 
 import ast
 import sys
 from pathlib import Path
 
-# package -> {public name: domains allowed to import it}
+# allowed exports per domain
 PUBLIC = {
     "engine": {
         "create_problem": {"session"},
@@ -27,14 +25,13 @@ NO_PYGAME = {"engine", "algorithms", "session"}
 
 
 def domain_of(path: Path) -> str | None:
-    """Return the domain a file belongs to, or None for tests, tools and contracts."""
     if path.name == "main.py" and len(path.parts) == 1:
         return "main"
     return path.parts[0] if path.parts and path.parts[0] in PUBLIC else None
 
 
+# verify imports inside a single file
 def check_file(path: Path) -> list[str]:
-    """Return the rule violations found in one file."""
     domain = domain_of(path)
     if domain is None:
         return []
@@ -61,7 +58,6 @@ def check_file(path: Path) -> list[str]:
 
 
 def main() -> None:
-    """Check every Python file under the repo root and exit 1 on violations."""
     errors = [e for p in sorted(Path(".").rglob("*.py")) for e in check_file(p)]
     print("\n".join(errors) or "import rules ok")
     sys.exit(1 if errors else 0)
