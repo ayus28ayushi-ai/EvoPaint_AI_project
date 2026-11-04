@@ -48,7 +48,6 @@ class RunScreen:
         self.config = get(payload, "run_config", payload)
         self._nav, self.finishing, self._finish_frames = None, False, 0
         self.session = backend.create_session(self.config)
-        self.recorder = backend.new_recorder(self.session)           # time-lapse capture (media)
         ctx.set_theme(get(self.config, "theme_id", "full_color"))
         ctx.audio.start_music()
 
@@ -198,7 +197,6 @@ class RunScreen:
             return
 
         self.session.tick(dt)
-        self.recorder.feed(self.session)
         self._handle_session_events(self.session.poll_events())
         self.entries = self.session.leaderboard()
         self.leaderboard.update(dt, self.entries)
@@ -260,7 +258,7 @@ class RunScreen:
         """Finish the session, let media build GIFs + postcard + gallery entry, then open the entry."""
         try:
             record = self.session.finish()
-            run_id = self.ctx.backend.save_run(record, self.recorder)
+            run_id = self.ctx.backend.save_run(record)
             self._nav = Navigation("entry", {"run_id": run_id})
         except Exception as error:                                   # never lose the app because saving failed
             log.exception("Saving the run failed")
@@ -374,5 +372,5 @@ class RunScreen:
         surface.blit(shade, (0, 0))
         draw_text(surface, fonts, "Saving your painting...", (surface.get_width() // 2, surface.get_height() // 2 - 10),
                   32, (255, 255, 255), "center", bold=True)
-        draw_text(surface, fonts, "Building the time-lapse and your postcard", (surface.get_width() // 2, surface.get_height() // 2 + 26),
+        draw_text(surface, fonts, "Building your postcard", (surface.get_width() // 2, surface.get_height() // 2 + 26),
                   16, (220, 220, 220), "center")

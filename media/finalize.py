@@ -1,14 +1,12 @@
 from __future__ import annotations
-from pathlib import Path
 from typing import Any
 from PIL import Image
 
 from .gallery import make_run_folder_name, save_run_folder
 from .postcard import create_postcard
-from .timelapse import TimelapseRecorder
 
 
-def save_run(record: Any, recorder: TimelapseRecorder | None = None) -> str:
+def save_run(record: Any, recorder: Any = None) -> str:
     """Build GIFs and postcard, store everything. Returns run_id."""
     if hasattr(record, "to_dict"):
         data = record.to_dict()
@@ -48,10 +46,6 @@ def save_run(record: Any, recorder: TimelapseRecorder | None = None) -> str:
     winner = (data.get("winners") or {}).get("best_final")
     postcard = create_postcard(data, target_img, result_images, winner)
 
-    panel_gifs, combined = {}, None
-    if recorder:
-        panel_gifs, combined = recorder.build_gifs(Path("out") / "tmp_gifs")
-
     history_csvs = {}
     if hasattr(record, "history"):
         for pidx, points in (record.history or {}).items():
@@ -67,8 +61,6 @@ def save_run(record: Any, recorder: TimelapseRecorder | None = None) -> str:
         result_images=result_images,
         shape_dicts=getattr(record, "shapes", None),
         history_csvs=history_csvs,
-        timelapse_gifs=panel_gifs,
-        combined_gif=combined,
         postcard_img=postcard,
     )
     return run_id
