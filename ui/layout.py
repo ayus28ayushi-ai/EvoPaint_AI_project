@@ -1,9 +1,3 @@
-"""Pure layout maths (no Pygame): where every region of the screen goes.
-
-Everything returns plain (x, y, width, height) tuples so it can be unit-tested without a
-window. Screens convert them to pygame.Rect. The window is a fixed 1280 x 800 canvas
-(Pygame scales it for us), which keeps the layout simple and predictable.
-"""
 from __future__ import annotations
 
 WINDOW_SIZE = (1280, 800)
@@ -58,7 +52,6 @@ def panel_grid(count: int, region, gap: int = 10) -> list:
 
 
 def panel_inner(rect, header: int = 30, footer: int = 24):
-    """Inside one panel cell: (header_rect, square_image_rect, footer_rect)."""
     x, y, w, h = rect
     side = max(min(w, h - header - footer), 1)           # the painting is always square
     image = (x + (w - side) // 2, y + header, side, side)

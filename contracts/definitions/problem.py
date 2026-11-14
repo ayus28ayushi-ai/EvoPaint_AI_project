@@ -1,4 +1,3 @@
-"""Problem-side data definitions and the Problem interface (contract v1.0, Sections 5.1-5.3, 5.6, 6.1)."""
 from __future__ import annotations
 
 import random
@@ -32,10 +31,7 @@ class Shape:
 
 @dataclass(frozen=True)
 class State:
-    """A painting (5.2): background colour plus ordered shapes (first drawn first).
 
-    next_shape_id is an additive field so shape ids are never reused after a removal.
-    """
 
     background: tuple
     shapes: tuple = ()

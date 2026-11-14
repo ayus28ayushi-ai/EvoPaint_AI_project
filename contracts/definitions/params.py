@@ -1,5 +1,3 @@
-"""ParamSpec and ActionSpec (contract 5.5). Owner: M3 - PLACEHOLDER with the exact contract names;
-if M3 pushes their own version, keep theirs."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -8,7 +6,6 @@ from typing import Any
 
 @dataclass(frozen=True)
 class ParamSpec:
-    """One tunable parameter shown as a slider."""
 
     name: str
     label: str
@@ -25,7 +22,6 @@ class ParamSpec:
 
 @dataclass(frozen=True)
 class ActionSpec:
-    """A one-shot button such as reheating."""
 
     name: str
     label: str

@@ -1,5 +1,3 @@
-"""Outcome, winners and awards (contract 5.12 and 5.13). Owner: M2."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -25,15 +23,14 @@ AWARD_IDS = (
     "solo_artist",
 )
 
-# Winners: category -> panel index, or None if nobody qualified.
-# Awards: award id -> panel index (absent if nobody earned it).
+
 Winners = dict[str, "int | None"]
 Awards = dict[str, int]
 
 
 @dataclass(frozen=True)
 class MilestoneHit:
-    """When a similarity level was first reached."""
+
 
     evaluations: int
     seconds: float
@@ -41,7 +38,6 @@ class MilestoneHit:
 
 @dataclass(frozen=True)
 class InjectionRecord:
-    """One injection and how long the panel took to recover from it."""
 
     evaluation_index: int
     cost_before: float
@@ -51,7 +47,6 @@ class InjectionRecord:
 
 @dataclass(frozen=True)
 class Outcome:
-    """Per-panel result, created by the Session at the end of a run."""
 
     final_similarity: float
     total_evaluations: int

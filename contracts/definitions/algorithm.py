@@ -1,4 +1,4 @@
-"""The Algorithm interface (contract 6.2). Owners: M1 to M4, one each."""
+
 
 from __future__ import annotations
 
@@ -23,12 +23,7 @@ class AlgorithmInfo:
 
 
 class Algorithm(ABC):
-    """Base class every algorithm follows. Only the Session uses it.
 
-    The constructor takes (problem, seed, params), creates its own
-    random.Random from the seed, and never touches the global random module.
-    Algorithms never edit a state, import Pygame, do file I/O or sleep.
-    """
 
     id: ClassVar[str]
     display_name: ClassVar[str]

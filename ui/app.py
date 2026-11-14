@@ -1,9 +1,3 @@
-"""The app shell: opens the window, finds every screen, moves between them, runs the loop.
-
-Screens are DISCOVERED, not registered: any class with a `screen_id` inside ui/screens/ or
-media/screens/ is picked up automatically (Contract 3). Navigation requests returned by a
-screen are (screen_id, payload) pairs (Contract 6.4).
-"""
 from __future__ import annotations
 
 import importlib

@@ -5,11 +5,7 @@ import random
 from dataclasses import dataclass, field
 from typing import Any
 
-# --- Contract definitions -------------------------------------------------------------
-# After kickoff the real classes live in contracts.definitions. Until then (or when this
-# file is run alone) we fall back to tiny local copies with the SAME field names
-# (Contract 5.5 and 5.7). Once the contract package exists, this block can be deleted.
-try:  # pragma: no cover - depends on the repository state
+try:  
     from contracts.definitions import ActionSpec, Algorithm, ParamSpec, Snapshot
 except ImportError:
     @dataclass
@@ -51,7 +47,7 @@ except ImportError:
 
 
 class SimulatedAnnealing(Algorithm):
-    # Class attributes required by the contract (6.2)
+  
     id = "simulated_annealing"
     display_name = "Simulated Annealing"
     description = ("Accepts some worse paintings while it is 'hot', then cools down and "
@@ -64,7 +60,6 @@ class SimulatedAnnealing(Algorithm):
     REHEAT_FRACTION = 0.5          # "reheat" jumps back to 50% of the start temperature
     MIN_TEMPERATURE = 0.001        # frozen below this until the user reheats
 
-    # ---------------------------------------------------------------- contract metadata
     @staticmethod
     def param_specs() -> list:
         """Sliders the UI will build for this algorithm (names reserved in Contract 7)."""
@@ -88,7 +83,6 @@ class SimulatedAnnealing(Algorithm):
         return [ActionSpec(name="reheat", label="Reheat",
                            help_text="Raise the temperature again to escape a stuck painting.")]
 
-    # ---------------------------------------------------------------- construction
     def __init__(self, problem, seed: int, params: dict | None = None):
         self.problem = problem
         self.rng = random.Random(seed)            # our own generator (Contract 2: no global random)
@@ -100,22 +94,20 @@ class SimulatedAnnealing(Algorithm):
         self.cost = problem.evaluate(self.state)   # initial evaluation is not counted
         self.best_state, self.best_cost = self.state, self.cost
 
-        # Counters (cumulative, as the Snapshot expects)
         self.iteration = 0
         self.evaluations = 0
         self.proposed_total = 0
         self.accepted_total = 0
         self.worse_accepted_total = 0
 
-        # Temperature is unknown until the first advance() calibrates it.
-        self.t0: float | None = None              # calibrated start temperature (before the scale slider)
+        self.t0: float | None = None              
         self.temperature: float | None = None
         self.last_accept_probability = 1.0
 
         for name, value in (params or {}).items():
             self.set_param(name, value)
 
-    # ---------------------------------------------------------------- helpers
+
     def _delta_scale(self) -> float:
         """Divide deltas by this. Current cost when relative, 1.0 when absolute."""
         return max(self.cost, 1e-12) if self.USE_RELATIVE_DELTA else 1.0
@@ -150,7 +142,7 @@ class SimulatedAnnealing(Algorithm):
         self.last_accept_probability = probability
         return self.rng.random() < probability
 
-    # ---------------------------------------------------------------- contract methods
+
     def advance(self, budget_evaluations: int) -> Snapshot:
         """Spend at least `budget_evaluations` evaluations, then report."""
         spent = 0
@@ -160,7 +152,7 @@ class SimulatedAnnealing(Algorithm):
         step_scale = self.params["step_scale"]
 
         while spent < budget_evaluations:
-            if self.temperature <= self.MIN_TEMPERATURE:   # frozen: stop searching until Reheat
+            if self.temperature <= self.MIN_TEMPERATURE:  
                 self.evaluations += budget_evaluations - spent
                 break
             proposal = self.problem.propose(self.state, self.rng, step_scale)

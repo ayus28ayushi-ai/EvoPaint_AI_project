@@ -1,4 +1,3 @@
-"""The 'stock market' chart: one rising line per panel plus a ticker with live changes."""
 from __future__ import annotations
 
 import math

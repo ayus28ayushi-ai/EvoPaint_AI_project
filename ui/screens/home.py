@@ -1,4 +1,3 @@
-"""Home screen: title, four buttons and a calm animated background."""
 from __future__ import annotations
 
 import math

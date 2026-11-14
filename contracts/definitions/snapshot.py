@@ -1,5 +1,3 @@
-"""Snapshot, HistoryPoint and LeaderboardEntry (contract 5.7, 5.8, 5.11)."""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -10,11 +8,6 @@ from contracts.definitions.outcome import MilestoneHit
 
 @dataclass(frozen=True)
 class Snapshot:
-    """What an algorithm reports after advancing.
-
-    The Session fills panel_index and elapsed_seconds; algorithms leave the
-    defaults. best_* is the best since the start or since the last injection.
-    """
 
     algorithm_id: str
     iteration: int
@@ -35,7 +28,6 @@ class Snapshot:
 
 @dataclass(frozen=True)
 class HistoryPoint:
-    """One point on a panel's chart. acceptance_rate is 0 to 1."""
 
     evaluations: int
     elapsed_seconds: float
@@ -48,7 +40,6 @@ class HistoryPoint:
 
 @dataclass(frozen=True)
 class LeaderboardEntry:
-    """One row of the leaderboard. Positive rank_change means moved up."""
 
     rank: int
     panel_index: int

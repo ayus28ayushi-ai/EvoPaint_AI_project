@@ -1,5 +1,3 @@
-"""Live controls for the focused panel. Sliders are BUILT FROM the algorithm's parameter
-specs (Contract 5.5), so a new algorithm gets its own sliders without any UI change."""
 from __future__ import annotations
 
 import logging

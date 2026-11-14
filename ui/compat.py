@@ -1,16 +1,3 @@
-"""The ONE place where the UI touches other members' code.
-
-Why this file exists: the UI must work before M1/M2/M4 have finished (and survive small
-naming differences). Everything the UI needs from the outside goes through here:
-
-  * get()              - read a field from an object OR a dict (contract objects may be either)
-  * Command helpers    - build commands for Session.send (Contract 5.9)
-  * RunConfig & friends- local copies with the contract's field names (Contract 5.3, 5.4)
-  * parse_panel_info   - tolerant reader for Session.panel_info (key names not frozen)
-  * load_backend()     - finds the real entry points (Contract 4), or falls back to fakes
-
-If the kickoff contract differs from what is guessed here, EDIT THIS FILE ONLY.
-"""
 from __future__ import annotations
 
 import importlib
@@ -20,7 +7,6 @@ from typing import Any, Callable
 
 log = logging.getLogger("ui.compat")
 
-# Frozen theme ids and display names (Contract 8)
 THEMES = [
     ("full_color", "Full Color"), ("black_white", "Black and White"), ("sepia", "Sepia"),
     ("neon", "Neon"), ("pastel", "Pastel"), ("ocean", "Ocean"), ("sunset", "Sunset"),
@@ -104,7 +90,6 @@ class RunConfig:                         # Contract 5.4
 # ------------------------------------------------------------------ commands (Contract 5.9)
 @dataclass
 class Command:
-    """`type` plus a payload. Payload keys are readable as attributes (command.panel)."""
     type: str
     payload: dict = field(default_factory=dict)
 
@@ -153,9 +138,6 @@ class PanelInfo:
 
 
 def parse_panel_info(info: Any) -> PanelInfo:
-    """Session.panel_info key names are not frozen, so accept the likely spellings.
-    Suggested names to agree with M2: algorithm_id, param_values, param_specs,
-    action_specs, speed, throttled."""
     return PanelInfo(
         algorithm_id=_first(info, ("algorithm_id", "algorithm", "id"), ""),
         params=dict(_first(info, ("param_values", "params", "parameters", "values"), {}) or {}),
@@ -177,8 +159,6 @@ class AlgInfo:
 
 
 def parse_algorithm_info(info: Any) -> AlgInfo:
-    """Read one entry of list_algorithms() (Contract 4: id, display name, description,
-    parameter specs, action specs). Field names are accepted in a few spellings."""
     algo_id = _first(info, ("id", "algorithm_id"), "")
     return AlgInfo(
         id=algo_id,
@@ -192,7 +172,6 @@ def parse_algorithm_info(info: Any) -> AlgInfo:
 # ------------------------------------------------------------------ backend loading
 @dataclass
 class Backend:
-    """Every outside entry point the UI uses (Contract 4)."""
     create_session: Callable
     list_algorithms: Callable
     list_shape_types: Callable

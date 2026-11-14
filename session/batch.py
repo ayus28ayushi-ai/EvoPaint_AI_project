@@ -1,4 +1,3 @@
-"""Headless runs and reports. The only place Matplotlib is allowed."""
 
 from __future__ import annotations
 
@@ -25,7 +24,6 @@ CSV_COLUMNS = (
 
 
 def run_to_end(session: Session, seconds: float = 1.0, max_ticks: int = 1_000_000) -> RunRecord:
-    """Tick until every panel spends its budget, then return the record."""
     ticks = 0
     while session.status() != "finished" and ticks < max_ticks:
         session.tick(seconds)
@@ -34,7 +32,6 @@ def run_to_end(session: Session, seconds: float = 1.0, max_ticks: int = 1_000_00
 
 
 def write_history_csv(record: RunRecord, out_dir: Path) -> list[Path]:
-    """Write history_<panel>.csv for every panel."""
     paths = []
     for panel, points in record.history.items():
         path = out_dir / f"history_{panel}.csv"
@@ -47,14 +44,12 @@ def write_history_csv(record: RunRecord, out_dir: Path) -> list[Path]:
 
 
 def run_seeds(make_session: Callable[[int], Session], seeds: Iterable[int]) -> list[RunRecord]:
-    """Run one full session per seed and return the records."""
     return [run_to_end(make_session(seed)) for seed in seeds]
 
 
 def average_curves(
     records: list[RunRecord], points: int = 200
 ) -> tuple[np.ndarray, dict[int, np.ndarray]]:
-    """Average each panel's best-similarity curve over seeds on a shared evaluation grid."""
     grid = np.linspace(0, records[0].config["max_evaluations"], points)
     curves = {}
     for panel in records[0].history:
@@ -71,7 +66,6 @@ def average_curves(
 
 
 def summarize(records: list[RunRecord]) -> list[dict[str, float]]:
-    """Return one row of seed-averaged results per panel."""
     rows = []
     for panel in range(len(records[0].results)):
         outcomes = [r.results[panel].outcome for r in records]
@@ -93,7 +87,6 @@ def summarize(records: list[RunRecord]) -> list[dict[str, float]]:
 
 
 def write_summary_csv(rows: list[dict[str, float]], out_dir: Path) -> Path:
-    """Write summary.csv with one row per panel."""
     path = out_dir / "summary.csv"
     with path.open("w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=list(rows[0]))
@@ -105,7 +98,6 @@ def write_summary_csv(rows: list[dict[str, float]], out_dir: Path) -> Path:
 def write_chart(
     grid: np.ndarray, curves: dict[int, np.ndarray], labels: list[str], runs: int, out_dir: Path
 ) -> Path:
-    """Plot the seed-averaged best similarity against evaluations."""
     import matplotlib
 
     matplotlib.use("Agg")
@@ -125,7 +117,6 @@ def write_chart(
 
 
 def make_config(args: argparse.Namespace, seed: int) -> Any:
-    """Build a RunConfig-shaped object from command-line flags."""
     ids = args.algorithms.split(",") if args.algorithms else sorted(find_algorithms())
     panels = [
         SimpleNamespace(algorithm_id=i, speed=10000.0, algorithm_params={}, painting_params={})
@@ -143,7 +134,6 @@ def make_config(args: argparse.Namespace, seed: int) -> Any:
 
 
 def main(argv: list[str] | None = None) -> None:
-    """Run all (or chosen) algorithms over several seeds and write averaged results."""
     parser = argparse.ArgumentParser(description=main.__doc__)
     parser.add_argument("--target", required=True)
     parser.add_argument("--algorithms", help="comma-separated ids; default is all")

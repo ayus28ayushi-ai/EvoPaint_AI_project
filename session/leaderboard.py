@@ -1,4 +1,3 @@
-"""Builds the ranked leaderboard."""
 
 from __future__ import annotations
 
@@ -11,7 +10,6 @@ def build_leaderboard(
     milestones: list[dict[int, MilestoneHit]],
     previous_ranks: dict[int, int],
 ) -> list[LeaderboardEntry]:
-    """Rank panels by best similarity; ties go to the lowest panel index."""
     order = sorted(range(len(snaps)), key=lambda i: (-snaps[i].best_similarity, i))
     return [
         LeaderboardEntry(

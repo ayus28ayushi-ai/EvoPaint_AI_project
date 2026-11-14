@@ -1,4 +1,3 @@
-"""Live leaderboard: rank, who, similarity, which milestones were reached, rank changes."""
 from __future__ import annotations
 
 import pygame

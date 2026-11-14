@@ -1,4 +1,3 @@
-"""Off-screen rendering with Pillow. Shapes are composited in order, only inside the region asked for."""
 from __future__ import annotations
 
 from functools import lru_cache
@@ -12,15 +11,12 @@ from .shapes import geometry
 
 try:  # Pillow >= 9.1
     _BOX = Image.Resampling.BOX
-except AttributeError:  # pragma: no cover
+except AttributeError:  
     _BOX = Image.BOX
 
 
 def _make_mask(s, w: int):
-    """Rasterise one shape in its own fixed frame (its full clipped bounding box) -> (mask, bbox) or None.
-
-    Using one fixed frame per shape makes region renders identical to full renders.
-    """
+    
     g = geometry(s, w)
     if g is None:
         return None
@@ -40,14 +36,11 @@ def _make_mask(s, w: int):
     return mask, bb
 
 
-_cached_mask = lru_cache(maxsize=16384)(_make_mask)  # used for the working size, where shapes are re-drawn often
+_cached_mask = lru_cache(maxsize=16384)(_make_mask) 
 
 
 def paint_region(shapes, bg, w: int, region, indices=None, base: np.ndarray | None = None) -> Image.Image:
-    """Render `region` (x0, y0, x1, y1) of the painting. `indices` limits which shapes are drawn.
 
-    If `base` (a uint8 array of the region) is given, shapes are drawn on top of it instead of the background.
-    """
     x0, y0, x1, y1 = region
     if base is None:
         crop = Image.new("RGB", (x1 - x0, y1 - y0), tuple(bg))
@@ -70,7 +63,6 @@ def paint_region(shapes, bg, w: int, region, indices=None, base: np.ndarray | No
 
 
 def render_state(state: State, size: int, working_size: int) -> Image.Image:
-    """Render a whole state at `size`. Sizes other than the working size are supersampled 2x for smooth edges."""
     ss = 1 if (size == working_size or size > 1024) else 2
     w = size * ss
     img = paint_region(state.shapes, state.background, w, (0, 0, w, w))

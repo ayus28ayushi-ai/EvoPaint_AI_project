@@ -1,4 +1,3 @@
-"""Shape geometry: turns a Shape into integer pixel geometry plus a clipped bounding box."""
 from __future__ import annotations
 
 import math
@@ -9,11 +8,7 @@ from contracts.definitions import Shape
 
 @lru_cache(maxsize=32768)
 def geometry(shape: Shape, w: int):
-    """Return (draw_kind, coords, line_width, bbox) for a canvas of w pixels, or None if invisible.
-
-    draw_kind is ellipse, polygon or line. Coordinates are integers so rasterisation is identical
-    whether a whole image or only a region is drawn. bbox is (x0, y0, x1, y1), end exclusive, clipped.
-    """
+   
     k, cx, cy, r = shape.kind, shape.x * w, shape.y * w, shape.size * w
     width = 0
     if k in ("circle", "ellipse"):

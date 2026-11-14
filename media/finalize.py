@@ -7,7 +7,6 @@ from .postcard import create_postcard
 
 
 def save_run(record: Any, recorder: Any = None) -> str:
-    """Build GIFs and postcard, store everything. Returns run_id."""
     if hasattr(record, "to_dict"):
         data = record.to_dict()
     elif hasattr(record, "__dict__"):

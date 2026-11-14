@@ -1,4 +1,3 @@
-"""Session domain: public entry points only."""
 
 from session.registry import list_algorithms
 from session.session import create_session

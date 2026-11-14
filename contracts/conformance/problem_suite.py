@@ -1,5 +1,3 @@
-"""Shared Problem conformance checks (owner: M1). Each check takes a zero-argument factory returning a
-fresh Problem and raises AssertionError on failure. Run via tests/engine/test_engine_conformance.py."""
 from __future__ import annotations
 
 import copy

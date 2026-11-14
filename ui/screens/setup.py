@@ -1,9 +1,3 @@
-"""Setup screen: choose theme, shapes, number of panels and each panel's algorithm and
-parameters, then press Start. Builds the RunConfig (Contract 5.4) and hands it to `run`.
-
-Parameter widgets are generated from each algorithm's parameter specs, so any new
-algorithm shows up here with its own sliders automatically.
-"""
 from __future__ import annotations
 
 import math

@@ -1,4 +1,3 @@
-"""Pure maths for the stock-market chart (no Pygame, so it is easy to test)."""
 from __future__ import annotations
 
 import math

@@ -24,7 +24,6 @@ def save_run_folder(
     combined_gif: Path | None = None,
     postcard_img: Image.Image | None = None,
 ) -> Path:
-    """Write one complete gallery entry. Returns the folder path."""
     GALLERY_ROOT.mkdir(parents=True, exist_ok=True)
     folder = GALLERY_ROOT / run_id
     folder.mkdir(parents=True, exist_ok=True)
@@ -52,7 +51,6 @@ def save_run_folder(
 
 
 def list_runs() -> list[dict[str, Any]]:
-    """Return run summaries, newest first. Skip damaged entries."""
     GALLERY_ROOT.mkdir(parents=True, exist_ok=True)
     runs = []
     for folder in sorted(GALLERY_ROOT.iterdir(), reverse=True):

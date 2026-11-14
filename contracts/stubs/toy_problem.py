@@ -1,5 +1,3 @@
-"""Toy Problem stub (owner: M1). A state holds K numbers (the x of K circles); cost is the squared
-distance to a hidden target vector. Lets M2/M3/M4 develop and test without the real engine."""
 from __future__ import annotations
 
 import math
@@ -15,7 +13,6 @@ K = 8
 
 
 class ToyProblem(Problem):
-    """Numeric stand-in for the painting engine."""
 
     def __init__(self, seed: int = 0, k: int = K) -> None:
         r = random.Random(seed)
