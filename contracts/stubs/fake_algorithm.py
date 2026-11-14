@@ -1,5 +1,7 @@
-"""Fake Algorithm that plays a scripted similarity curve 
-    No images and no real search
+"""Fake Algorithm that plays a scripted similarity curve (contract 11). Owner: M2.
+
+No images and no real search: similarity climbs along a fixed curve, so the
+Session, UI and media code can be built before any real algorithm exists.
 """
 
 from __future__ import annotations
