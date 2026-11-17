@@ -1,5 +1,4 @@
-"""The Session interface (contract 6.3). Owner: M2.
-
+"""
 Decisions made here (flag in review):
 - send() queues; queued commands apply at the start of the next tick.
 - finish() is idempotent: calling it again returns the same RunRecord.
