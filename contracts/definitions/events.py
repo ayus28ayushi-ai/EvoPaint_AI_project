@@ -1,5 +1,3 @@
-"""Events read through Session.poll_events (contract 5.10). Owner: M2."""
-
 from __future__ import annotations
 
 from collections.abc import Mapping
@@ -22,7 +20,6 @@ EVENT_TYPES = tuple(EVENT_PAYLOAD_KEYS)
 
 @dataclass(frozen=True)
 class Event:
-    """Common fields plus a type-specific payload. panel is None if run-wide."""
 
     type: str
     panel: int | None

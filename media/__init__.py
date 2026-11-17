@@ -1,8 +1,3 @@
-"""Media package public entry points (M4).
-
-Only these names may be imported by other packages.
-"""
-
 from .audio import get_audio
 from .effects import get_effects
 from .timelapse import new_recorder

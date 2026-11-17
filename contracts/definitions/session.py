@@ -1,9 +1,3 @@
-"""
-Decisions made here (flag in review):
-- send() queues; queued commands apply at the start of the next tick.
-- finish() is idempotent: calling it again returns the same RunRecord.
-- leaderboard rank_change is the change since the previous tick.
-"""
 
 from __future__ import annotations
 
@@ -33,7 +27,6 @@ class PanelInfo:
 
 @runtime_checkable
 class Session(Protocol):
-    """The object M3's run screen talks to. RunRecord is defined by M4."""
 
     def tick(self, seconds: float) -> None:
         """Advance every unfinished panel according to its speed."""

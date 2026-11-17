@@ -1,5 +1,3 @@
-"""The Session: runs 1 to 4 panels and gives the UI snapshots, events and a record."""
-
 from __future__ import annotations
 
 import logging
@@ -47,7 +45,6 @@ RESULT_SIZE = 512
 
 @dataclass
 class Panel:
-    """Everything the Session keeps for one panel."""
 
     index: int
     problem: Any

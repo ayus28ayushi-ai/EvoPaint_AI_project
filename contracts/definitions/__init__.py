@@ -1,5 +1,3 @@
-"""Frozen data and interface definitions (contract Sections 5 and 6)."""
-
 from contracts.definitions.algorithm import Algorithm, AlgorithmInfo
 from contracts.definitions.commands import COMMAND_TYPES, Command
 from contracts.definitions.events import EVENT_TYPES, Event

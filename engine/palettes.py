@@ -1,4 +1,3 @@
-"""Theme palette rules (contract Section 8). Mechanisms: none, gradient_map, snap_palette."""
 from __future__ import annotations
 
 import logging
@@ -36,7 +35,6 @@ def _luma(r: int, g: int, b: int) -> int:
 
 
 class ThemeRule:
-    """The palette rule of one theme: how the target is processed and how colours are constrained."""
 
     def __init__(self, theme_id: str) -> None:
         if theme_id not in THEMES:
@@ -54,7 +52,6 @@ class ThemeRule:
                                  for k in range(3)], axis=1).round().astype(np.uint8)
 
     def process_array(self, arr: np.ndarray) -> np.ndarray:
-        """Apply the palette rule to a uint8 (H, W, 3) array."""
         if self.mechanism == "none":
             return arr
         a = arr.astype(np.int32)
@@ -70,7 +67,7 @@ class ThemeRule:
         return self.palette[idx].astype(np.uint8)
 
     def constrain(self, r: int, g: int, b: int) -> tuple:
-        """Nearest allowed colour for a shape colour."""
+    
         r, g, b = int(min(255, max(0, r))), int(min(255, max(0, g))), int(min(255, max(0, b)))
         if self.mechanism == "none":
             return r, g, b
@@ -87,11 +84,9 @@ class ThemeRule:
         return out
 
     def random_palette_color(self, rng: random.Random) -> tuple | None:
-        """A random palette entry for snap themes, otherwise None."""
         return rng.choice(self.colors) if self.mechanism == "snap_palette" else None
 
     def swatches(self) -> list:
-        """Short list of colours describing the palette."""
         if self.mechanism == "none":
             return list(_NEUTRAL_SWATCHES)
         if self.mechanism == "gradient_map":
@@ -103,7 +98,6 @@ _RULES: dict = {}
 
 
 def get_rule(theme_id: str) -> ThemeRule:
-    """Cached ThemeRule for a theme id (unknown ids fall back to full_color)."""
     rule = _RULES.get(theme_id)
     if rule is None:
         rule = _RULES[theme_id] = ThemeRule(theme_id)

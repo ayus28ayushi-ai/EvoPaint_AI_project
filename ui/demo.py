@@ -1,9 +1,3 @@
-"""Run the whole interface ALONE, against stand-ins for the engine, session and media.
-
-    python -m ui.demo                 start at the home screen
-    python -m ui.demo --screen setup  jump straight to the setup screen
-    python -m ui.demo --screen run    jump straight into a 4-panel fake race
-"""
 import argparse
 
 from ui import run_app

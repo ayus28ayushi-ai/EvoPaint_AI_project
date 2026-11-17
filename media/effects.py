@@ -1,4 +1,3 @@
-"""Simple visual effects – confetti / glow on milestones."""
 
 from __future__ import annotations
 
@@ -30,7 +29,6 @@ class Particle:
 
 
 class Effects:
-    """Minimal Effects object that satisfies the contract."""
 
     def __init__(self) -> None:
         self.particles: list[Particle] = []
@@ -44,7 +42,6 @@ class Effects:
         ]
 
     def on_event(self, event: Any, panel_rect: tuple[int, int, int, int] | None = None) -> None:
-        """Spawn confetti when a milestone is reached."""
         etype = getattr(event, "type", None) or (event.get("type") if isinstance(event, dict) else None)
         if etype != "milestone_reached":
             return
@@ -90,7 +87,6 @@ _effects_instance: Effects | None = None
 
 
 def get_effects() -> Effects:
-    """Public entry point."""
     global _effects_instance
     if _effects_instance is None:
         _effects_instance = Effects()

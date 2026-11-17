@@ -1,5 +1,3 @@
-"""Outcomes, winners and awards."""
-
 from __future__ import annotations
 
 from contracts.definitions import (

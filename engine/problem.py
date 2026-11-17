@@ -1,9 +1,3 @@
-"""PaintingProblem: the engine's implementation of the Problem contract (6.1).
-
-Speed: every state that passes through the engine keeps its rendered canvas, its exact integer error
-and its shape bounding boxes in a small cache. A neighbour is then scored by re-rendering only the
-region that changed, and the result equals a full evaluation exactly (tests check this).
-"""
 from __future__ import annotations
 
 import logging
@@ -34,7 +28,6 @@ except AttributeError:  # pragma: no cover
 
 
 class _Entry:
-    """Cached render of one state: canvas array, exact integer error, bounding boxes."""
 
     __slots__ = ("state", "arr", "sse", "bb")
 
@@ -50,7 +43,6 @@ def _union(*rows) -> tuple | None:
 
 
 class PaintingProblem(Problem):
-    """Evolving-painting problem for one target image, one theme and one shape configuration."""
 
     def __init__(self, image_path: str, shape_config: ShapeConfig, theme_id: str, seed: int) -> None:
         self.seed, self.config, self.rule = seed, shape_config, get_rule(theme_id)
@@ -75,7 +67,7 @@ class PaintingProblem(Problem):
         d["_cache"] = OrderedDict()
         return d
 
-    # ---- target -------------------------------------------------------------------------------
+   
     def _processed(self, size: int) -> np.ndarray:
         arr = self._targets.get(size)
         if arr is None:
@@ -84,29 +76,23 @@ class PaintingProblem(Problem):
         return arr
 
     def target_image(self, size: int) -> Image.Image:
-        """The processed target (palette rule applied) at the requested size."""
         return Image.fromarray(self._processed(int(size)))
 
-    # ---- contract -----------------------------------------------------------------------------
+    
     def initial_state(self) -> State:
-        """Background = average colour of the processed target, no shapes."""
         avg = self._target96.reshape(-1, 3).mean(axis=0)
         return State(tuple(int(round(v)) for v in avg), (), 0)
 
     def similarity(self, cost: float) -> float:
-        """100 * (1 - sqrt(cost) / 255)."""
         return similarity_from_cost(cost)
 
     def evaluate(self, state: State) -> float:
-        """Cost of a state (uses the cache when the state was seen before)."""
         return cost_from_sse(self._entry(state).sse, self._npix)
 
     def evaluate_full(self, state: State) -> float:
-        """Always renders from scratch (used by tests to verify the incremental path)."""
         return cost_from_sse(self._full_entry(state).sse, self._npix)
 
     def propose(self, state: State, rng: random.Random, step_scale: float) -> Proposal:
-        """One neighbour of `state` with its exact cost. Never edits `state`."""
         parent = self._entry(state)
         mut = plan_mutation(state, rng, step_scale, self._factory, self._shape_limit, self._factory.max_shape_size)
         new_state, entry = self._apply(parent, mut)
@@ -114,38 +100,32 @@ class PaintingProblem(Problem):
         return Proposal(new_state, cost_from_sse(entry.sse, self._npix), mut.kind)
 
     def render(self, state: State, size: int) -> Image.Image:
-        """Pillow image of the painting at `size` pixels."""
         return render_state(state, int(size), W)
 
     def make_injection(self, seed: int, count: int) -> InjectionBatch:
-        """Deterministic intruder shapes for (seed, count)."""
         f = ShapeFactory(self._factory.kinds, self.rule, self._target96, self.config.alpha_min, self.config.alpha_max)
         return _inj.make_injection(f, seed, count)
 
     def apply_injection(self, state: State, batch: InjectionBatch) -> State:
-        """Add the batch on top of the state."""
         return _inj.apply_injection(state, batch)
 
     def shape_count(self, state: State) -> int:
-        """Number of shapes."""
         return len(state.shapes)
 
     def state_to_dict(self, state: State) -> dict:
-        """Plain dict (JSON friendly)."""
+
         shapes = [{"shape_id": s.shape_id, "kind": s.kind, "x": s.x, "y": s.y, "size": s.size, "aspect": s.aspect,
                    "rotation": s.rotation, "points": [list(p) for p in s.points], "red": s.red, "green": s.green,
                    "blue": s.blue, "alpha": s.alpha, "origin": s.origin} for s in state.shapes]
         return {"background": list(state.background), "next_shape_id": state.next_shape_id, "shapes": shapes}
 
     def state_from_dict(self, data: dict) -> State:
-        """Inverse of state_to_dict."""
         shapes = tuple(Shape(d["shape_id"], d["kind"], d["x"], d["y"], d["size"], d["aspect"], d["rotation"],
                              tuple(tuple(p) for p in d["points"]), d["red"], d["green"], d["blue"], d["alpha"],
                              d["origin"]) for d in data["shapes"])
         return State(tuple(data["background"]), shapes, data.get("next_shape_id", 0))
 
     def param_specs(self) -> list:
-        """Painting-group parameters (Section 7)."""
         return [
             ParamSpec("shape_limit", "Shape limit", "int", 10, 1000, self.config.shape_limit, 10, "linear",
                       "painting", "Maximum number of shapes in the painting."),
@@ -156,7 +136,6 @@ class PaintingProblem(Problem):
         ]
 
     def set_param(self, name: str, value: Any) -> None:
-        """Live change of a painting parameter."""
         if name == "shape_limit":
             self._shape_limit = int(min(1000, max(10, value)))
         elif name == "max_shape_size":
@@ -166,7 +145,6 @@ class PaintingProblem(Problem):
         else:
             log.warning("unknown painting parameter %r ignored", name)
 
-    # ---- cache and incremental evaluation -----------------------------------------------------
     def _bb_array(self, shapes) -> np.ndarray:
         if not shapes:
             return np.zeros((0, 4), dtype=np.int32)
@@ -192,7 +170,6 @@ class PaintingProblem(Problem):
         return e
 
     def _apply(self, p: _Entry, m: Mutation) -> tuple:
-        """Build the neighbour state and its cache entry by re-rendering only the changed region."""
         st, shapes, bb, k = p.state, p.state.shapes, p.bb, m.kind
         next_id = st.next_shape_id
         base_only = False

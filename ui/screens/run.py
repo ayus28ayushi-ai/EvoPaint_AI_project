@@ -1,13 +1,3 @@
-"""Run screen: 1 to 4 panels painting side by side, the stock-market chart, leaderboard,
-live sliders and hotkeys (Contract 9).
-
-Data flow every frame:
-    session.tick(dt)                -> algorithms advance
-    session.poll_events()           -> milestones/injections -> toasts, markers, audio, confetti
-    session.snapshot/history/...    -> what we draw
-    keys and sliders                -> session.send(Command)
-The screen never runs an algorithm itself.
-"""
 from __future__ import annotations
 
 import logging

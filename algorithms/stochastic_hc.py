@@ -1,5 +1,3 @@
-"""Algorithm 2: stochastic hill climbing."""
-
 from __future__ import annotations
 
 import random
@@ -13,7 +11,6 @@ HIT_WINDOW = 50
 
 
 class StochasticHillClimbing(Algorithm):
-    """Proposes a batch of neighbors and moves to one improving neighbor, chosen at random."""
 
     id = "stochastic_hc"
     display_name = "Stochastic Hill Climbing"
@@ -25,7 +22,6 @@ class StochasticHillClimbing(Algorithm):
     def __init__(
         self, problem: Any, seed: int, params: Mapping[str, Any] | None = None
     ) -> None:
-        """Start from the problem's initial state."""
         self._problem = problem
         self._rng = random.Random(seed)
         self._params = {s.name: s.default for s in self.param_specs()}
@@ -40,7 +36,6 @@ class StochasticHillClimbing(Algorithm):
 
     @staticmethod
     def param_specs() -> list[ParamSpec]:
-        """Publish step_scale and batch_size."""
         return [
             ParamSpec(
                 name="step_scale",
@@ -66,18 +61,15 @@ class StochasticHillClimbing(Algorithm):
 
     @staticmethod
     def action_specs() -> list[ActionSpec]:
-        """This algorithm has no actions."""
         return []
 
     def advance(self, budget_evaluations: int) -> Snapshot:
-        """Run whole batches until the budget is spent."""
         spent = 0
         while spent < budget_evaluations:
             spent += self._step()
         return self.current_snapshot()
 
     def _step(self) -> int:
-        """Try one batch; move to a random improving proposal if there is one."""
         size = int(self._params["batch_size"])
         scale = float(self._params["step_scale"])
         batch = [self._problem.propose(self._state, self._rng, scale) for _ in range(size)]
@@ -93,7 +85,6 @@ class StochasticHillClimbing(Algorithm):
         return size
 
     def set_param(self, name: str, value: Any) -> None:
-        """Change a parameter, clamped to its range."""
         spec = next((s for s in self.param_specs() if s.name == name), None)
         if spec is None:
             raise KeyError(name)
@@ -105,13 +96,11 @@ class StochasticHillClimbing(Algorithm):
         raise ValueError(f"unknown action: {action_name!r}")
 
     def inject(self, batch: Any) -> None:
-        """Add the injected shapes, re-evaluate and restart from there."""
         self._state = self._problem.apply_injection(self._state, batch)
         self._cost = self._problem.evaluate(self._state)
         self._evaluations += 1
 
     def current_snapshot(self) -> Snapshot:
-        """Return the latest Snapshot without advancing."""
         similarity = self._problem.similarity(self._cost)
         hit_rate = sum(self._hits) / len(self._hits) if self._hits else 0.0
         return Snapshot(

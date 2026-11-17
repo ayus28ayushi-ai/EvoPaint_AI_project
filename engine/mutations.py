@@ -1,4 +1,3 @@
-"""Neighbour generation: add, move, resize, recolor, alpha, reorder, remove. Uses only the rng it is given."""
 from __future__ import annotations
 
 import math
@@ -12,7 +11,6 @@ from .palettes import ThemeRule
 
 @dataclass(frozen=True)
 class Mutation:
-    """A planned change. `shape` is the new/changed shape, `index` the position it applies to."""
 
     kind: str
     index: int = -1
@@ -25,7 +23,6 @@ def _clamp(v: float, lo: float, hi: float) -> float:
 
 
 class ShapeFactory:
-    """Creates random shapes according to the shape config, theme rule and painting parameters."""
 
     def __init__(self, kinds, rule: ThemeRule, target_arr, alpha_min: float, alpha_max: float) -> None:
         self.kinds, self.rule, self.target = tuple(kinds), rule, target_arr
@@ -34,7 +31,6 @@ class ShapeFactory:
         self.informed_colors = True
 
     def color_at(self, rng: random.Random, x: float, y: float, informed: bool) -> tuple:
-        """Colour for a new shape: from the target at (x, y) if informed, else random, then palette-constrained."""
         if informed:
             h, w = self.target.shape[:2]
             px = self.target[min(h - 1, int(y * h)), min(w - 1, int(x * w))]
@@ -43,7 +39,6 @@ class ShapeFactory:
 
     def make(self, rng: random.Random, shape_id: int, step_scale: float, origin: str = "evolved",
              informed: bool | None = None, max_size: float | None = None) -> Shape:
-        """One random shape. step_scale limits the size of new shapes (coarse to fine)."""
         informed = self.informed_colors if informed is None else informed
         kind = rng.choice(self.kinds)
         x, y = rng.random(), rng.random()

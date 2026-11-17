@@ -1,4 +1,3 @@
-"""The RunRecord returned by Session.finish (contract 5.14, in memory)."""
 
 from __future__ import annotations
 
@@ -14,7 +13,6 @@ CONTRACT_VERSION = "1.0"
 
 @dataclass
 class Injection:
-    """One injection, filled in as the panel recovers."""
 
     evaluation_index: int
     cost_before: float
@@ -24,7 +22,6 @@ class Injection:
 
 @dataclass(frozen=True)
 class PanelResult:
-    """Outcome plus the final and best states of one panel."""
 
     outcome: Outcome
     final_state: Any
@@ -32,7 +29,6 @@ class PanelResult:
 
 
 def to_plain(value: Any) -> Any:
-    """Turn dataclasses, namespaces and tuples into dicts and lists that JSON accepts."""
     if is_dataclass(value) and not isinstance(value, type):
         return {f.name: to_plain(getattr(value, f.name)) for f in fields(value)}
     if isinstance(value, Mapping):
@@ -46,7 +42,6 @@ def to_plain(value: Any) -> Any:
 
 @dataclass
 class RunRecord:
-    """Everything M4 needs to save a run. config is plain data; images are Pillow images."""
 
     run_id: str
     created_at: str
@@ -61,7 +56,6 @@ class RunRecord:
     shapes: dict[int, dict] = field(default_factory=dict)  # Problem.state_to_dict of each best state
 
     def to_dict(self) -> dict[str, Any]:
-        """Return every saved field as JSON-ready plain data (images excluded)."""
         return {
             "run_id": self.run_id,
             "created_at": self.created_at,
@@ -77,5 +71,4 @@ class RunRecord:
 
 
 def make_run_id(seed: int, now: datetime) -> str:
-    """Name a run by date, time and seed, as the gallery folder expects."""
     return f"{now:%Y%m%d_%H%M%S}_{seed}"

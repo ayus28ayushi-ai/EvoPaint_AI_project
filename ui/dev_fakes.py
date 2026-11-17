@@ -1,9 +1,3 @@
-"""Stand-ins for everyone else's code, so M3 can build and demo the whole UI alone.
-
-None of this is shipped logic: it only imitates the contract (Section 6) closely enough
-that the real session, engine and media modules can replace it without UI changes.
-Uses Pillow and NumPy only (no Pygame), so it is also usable from tests.
-"""
 from __future__ import annotations
 
 import math
@@ -89,7 +83,6 @@ def fake_palette_swatches(theme_id: str) -> list:
 
 # ------------------------------------------------------------------ null media
 class _Null:
-    """Accepts any method call and does nothing (stand-in for audio and effects)."""
     def __getattr__(self, name):
         return lambda *a, **k: None
 
@@ -112,10 +105,6 @@ def fake_save_run(record, recorder) -> str:
 
 # ------------------------------------------------------------------ fake session
 class FakeSession:
-    """Plays believable curves for 1 to 4 panels and obeys every Command (Contract 6.3)."""
-
-    # (curve speed as a fraction of the run budget, final ceiling) so the algorithms look
-    # different in the demo while still finishing inside the budget
     _CURVES = {"hill_climbing": (0.11, 90.0), "stochastic_hc": (0.08, 91.5),
                "simulated_annealing": (0.15, 96.5), "iterative_hc": (0.12, 93.0)}
 

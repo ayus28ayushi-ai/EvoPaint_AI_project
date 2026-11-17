@@ -1,8 +1,3 @@
-"""Commands sent to the Session (contract 5.9). Owner: M2.
-
-Queued commands are applied at the start of the next tick, before advancing.
-"""
-
 from __future__ import annotations
 
 from collections.abc import Mapping
@@ -30,7 +25,6 @@ REQUIRED_KEYS: dict[str, tuple[str, ...]] = {
 
 @dataclass(frozen=True)
 class Command:
-    """A command type plus its payload. Validated on creation."""
 
     type: str
     payload: Mapping[str, Any] = field(default_factory=dict)
@@ -48,36 +42,30 @@ class Command:
 
 
 def pause() -> Command:
-    """Build a pause command."""
     return Command("pause")
 
 
 def resume() -> Command:
-    """Build a resume command."""
     return Command("resume")
 
 
 def finish() -> Command:
-    """Build a finish command."""
+
     return Command("finish")
 
 
 def set_speed(panel: int, speed: float) -> Command:
-    """Build a set_speed command."""
     return Command("set_speed", {"panel": panel, "speed": speed})
 
 
 def set_param(panel: int, group: str, name: str, value: Any) -> Command:
-    """Build a set_param command."""
     payload = {"panel": panel, "group": group, "name": name, "value": value}
     return Command("set_param", payload)
 
 
 def trigger_action(panel: int, action: str) -> Command:
-    """Build a trigger_action command."""
     return Command("trigger_action", {"panel": panel, "action": action})
 
 
 def inject(count: int = 50, panels: str | list[int] = "all") -> Command:
-    """Build an inject command; panels is "all" or a list of panel indexes."""
     return Command("inject", {"count": count, "panels": panels})

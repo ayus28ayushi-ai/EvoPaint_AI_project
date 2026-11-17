@@ -1,4 +1,3 @@
-"""Skins (colors per theme id), fonts and small drawing helpers. M3 owns this look."""
 from __future__ import annotations
 
 import json
@@ -29,7 +28,6 @@ def _hex(value: str) -> tuple:
 
 
 class Skin:
-    """Colors and corner style for one theme. Colors are RGB tuples."""
 
     def __init__(self, data: dict, theme_id: str = "full_color"):
         self.theme_id = theme_id
@@ -51,7 +49,6 @@ class Skin:
 
 
 class Fonts:
-    """Caches fonts by (size, bold) so we never rebuild them every frame."""
 
     def __init__(self):
         self._cache = {}
@@ -118,8 +115,6 @@ _SQUARE_CACHE: dict = {}
 
 
 def load_square_surface(path: str, size: int):
-    """Load an image file, center-crop it to a square and scale it. Returns None if unreadable.
-    Results are cached so thumbnails are not rebuilt every frame."""
     key = (path, size)
     if key in _SQUARE_CACHE:
         return _SQUARE_CACHE[key]

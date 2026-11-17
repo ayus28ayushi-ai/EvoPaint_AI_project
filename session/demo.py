@@ -1,4 +1,3 @@
-"""Runs the Session alone against the contract stubs: python -m session.demo"""
 
 from __future__ import annotations
 
@@ -13,7 +12,6 @@ log = logging.getLogger(__name__)
 
 
 def main() -> None:
-    """Run three fake panels, inject once, and print the standings and awards."""
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     steps = [0.2, 0.4, 0.8]
     panels = [

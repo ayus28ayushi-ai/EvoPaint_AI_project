@@ -1,5 +1,3 @@
-
-
 from __future__ import annotations
 
 import logging
@@ -29,8 +27,6 @@ MIN_SPEED, MAX_SPEED = 50.0, 10000.0
 
 @dataclass(frozen=True)
 class PanelResult:
-    """Provisional per-panel result stored in the record."""
-
     outcome: Outcome
     final_state: Any
     best_state: Any
@@ -38,8 +34,6 @@ class PanelResult:
 
 @dataclass
 class ProvisionalRunRecord:
-    """Provisional RunRecord with the in-memory fields of Section 5.14."""
-
     run_id: str
     created_at: str
     contract_version: str
@@ -53,7 +47,6 @@ class ProvisionalRunRecord:
 
 
 def _painting_specs() -> list[ParamSpec]:
-    """Return the painting-group specs the fake pretends the engine publishes."""
     return [
         ParamSpec(
             name="shape_limit", label="Shape limit", kind="int",
@@ -69,7 +62,6 @@ def _painting_specs() -> list[ParamSpec]:
 
 
 def _best_panel(values: dict[int, float], largest: bool) -> int | None:
-    """Return the winning panel index; ties go to the lowest index."""
     winner: int | None = None
     for index in sorted(values):
         if winner is None:
@@ -80,7 +72,6 @@ def _best_panel(values: dict[int, float], largest: bool) -> int | None:
 
 
 class FakeSession:
-    """A Session with scripted panels. Accepts every command in Section 5.9."""
 
     def __init__(
         self,
@@ -89,7 +80,6 @@ class FakeSession:
         max_evaluations: int = 20_000,
         speed: float = 1000.0,
     ) -> None:
-        """Create num_panels fake panels; panel i climbs a little faster than i-1."""
         if not 1 <= num_panels <= 4:
             raise ValueError("a run has 1 to 4 panels")
         self._seed = seed
@@ -130,7 +120,6 @@ class FakeSession:
     # ---- Session interface -------------------------------------------------
 
     def tick(self, seconds: float) -> None:
-        """Apply queued commands, then advance every unfinished panel."""
         queue, self._queue = self._queue, []
         for command in queue:
             self._handle(command)
@@ -156,15 +145,12 @@ class FakeSession:
             self._end_run("budget")
 
     def send(self, command: Command) -> None:
-        """Queue a command; it applies at the start of the next tick."""
         self._queue.append(command)
 
     def snapshot(self, panel: int) -> Snapshot:
-        """Return the latest Snapshot of a panel."""
         return self._snap(panel)
 
     def history(self, panel: int, max_points: int) -> list[HistoryPoint]:
-        """Return at most max_points points, evenly thinned, oldest first."""
         points = self._histories[panel]
         if len(points) <= max_points:
             return list(points)
@@ -172,16 +158,13 @@ class FakeSession:
         return [points[int(k * stride)] for k in range(max_points)]
 
     def leaderboard(self) -> list[LeaderboardEntry]:
-        """Return entries sorted by rank."""
         return list(self._entries)
 
     def poll_events(self) -> list[Event]:
-        """Return events since the last call."""
         events, self._pending = self._pending, []
         return events
 
     def panel_info(self, panel: int) -> PanelInfo:
-        """Return parameter values, specs, speed and throttle flag."""
         values = {**self._params[panel]["algorithm"], **self._params[panel]["painting"]}
         specs = tuple(FakeAlgorithm.param_specs()) + tuple(_painting_specs())
         return PanelInfo(
@@ -194,18 +177,15 @@ class FakeSession:
         )
 
     def render(self, panel: int, size: int) -> Any:
-        """Return a flat gray image whose brightness follows similarity."""
         from PIL import Image
 
         level = int(2.55 * self._snap(panel).similarity)
         return Image.new("RGB", (size, size), (level, level, level))
 
     def status(self) -> str:
-        """Return running, paused or finished."""
         return self._status
 
     def finish(self) -> ProvisionalRunRecord:
-        """Stop the run and return the record; calling again returns the same one."""
         if self._record is None:
             for i in range(len(self._algos)):
                 self._finish_panel(i, "user")
@@ -217,12 +197,10 @@ class FakeSession:
     # ---- internals ---------------------------------------------------------
 
     def _snap(self, panel: int) -> Snapshot:
-        """Algorithm snapshot with the Session's fields filled in."""
         snap = self._algos[panel].current_snapshot()
         return replace(snap, panel_index=panel, elapsed_seconds=self._elapsed[panel])
 
     def _emit(self, type_: str, panel: int | None, **payload: Any) -> None:
-        """Log an event and queue it for poll_events."""
         snaps = [self._snap(i) for i in range(len(self._algos))]
         if panel is None:
             evaluations = max(s.evaluations for s in snaps)
@@ -235,7 +213,6 @@ class FakeSession:
         self._log.append(event)
 
     def _handle(self, command: Command) -> None:
-        """Apply one command."""
         p = command.payload
         if command.type == "pause" and self._status == "running":
             self._status = "paused"
@@ -261,7 +238,6 @@ class FakeSession:
                 self._inject(i, p.get("count", 50))
 
     def _set_param(self, panel: int, group: str, name: str, value: Any) -> None:
-        """Change a parameter and emit param_changed."""
         old = self._params[panel][group].get(name)
         if group == "algorithm":
             try:
@@ -274,7 +250,6 @@ class FakeSession:
         self._emit("param_changed", panel, name=name, old_value=old, new_value=value)
 
     def _inject(self, panel: int, count: int) -> None:
-        """Inject into one panel and record it for recovery tracking."""
         if self._done[panel]:
             return
         algo = self._algos[panel]
@@ -290,7 +265,6 @@ class FakeSession:
         )
 
     def _history_append(self, panel: int, snap: Snapshot) -> None:
-        """Append a history point, thinning the older half when over the cap."""
         rate = snap.accepted_total / snap.proposed_total if snap.proposed_total else 0.0
         points = self._histories[panel]
         points.append(
@@ -304,7 +278,6 @@ class FakeSession:
             self._histories[panel] = points[:half:2] + points[half:]
 
     def _after_advance(self, panel: int, snap: Snapshot) -> None:
-        """Record history, milestones and injection recovery after a tick."""
         self._history_append(panel, snap)
         for level in MILESTONE_LEVELS:
             if snap.best_similarity >= level and level not in self._milestones[panel]:
@@ -315,7 +288,6 @@ class FakeSession:
                 record["recovery"] = snap.evaluations - record["index"]
 
     def _update_leaderboard(self) -> None:
-        """Rebuild the leaderboard and emit leader_changed when the leader changes."""
         snaps = [self._snap(i) for i in range(len(self._algos))]
         order = sorted(range(len(snaps)), key=lambda i: (-snaps[i].best_similarity, i))
         entries = []
@@ -335,7 +307,6 @@ class FakeSession:
         self._leader = leader
 
     def _finish_panel(self, panel: int, reason: str) -> None:
-        """Mark a panel finished once."""
         if not self._done[panel]:
             self._done[panel] = True
             self._emit("panel_finished", panel, reason=reason)
@@ -348,7 +319,6 @@ class FakeSession:
     # ---- scoring -----------------------------------------------------------
 
     def _outcome(self, panel: int) -> Outcome:
-        """Build a panel's Outcome from its history and counters."""
         snap = self._snap(panel)
         points = self._histories[panel]
         area = sum(
@@ -377,7 +347,6 @@ class FakeSession:
         )
 
     def _build_record(self) -> ProvisionalRunRecord:
-        """Assemble outcomes, winners, awards, events and history."""
         outcomes = [self._outcome(i) for i in range(len(self._algos))]
         winners = _winners(outcomes)
         return ProvisionalRunRecord(
@@ -397,7 +366,6 @@ class FakeSession:
 
 
 def _winners(outcomes: list[Outcome]) -> dict[str, int | None]:
-    """Pick a winner per category by evaluations; ties go to the lowest index."""
     def reached(level: str) -> dict[int, float]:
         hits = {i: getattr(o, f"time_to_{level}") for i, o in enumerate(outcomes)}
         return {i: h.evaluations for i, h in hits.items() if h is not None}
@@ -424,7 +392,6 @@ def _winners(outcomes: list[Outcome]) -> dict[str, int | None]:
 
 
 def _awards(outcomes: list[Outcome], winners: dict[str, int | None]) -> dict[str, int]:
-    """Derive awards from winners; a one-panel run only gets solo_artist."""
     if len(outcomes) == 1:
         return {"solo_artist": 0}
     risky = {i: float(o.worse_accepted_total) for i, o in enumerate(outcomes) if o.worse_accepted_total >= 1}

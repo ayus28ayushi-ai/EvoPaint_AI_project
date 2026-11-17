@@ -1,7 +1,3 @@
-"""Fake Algorithm that plays a scripted similarity curve 
-    No images and no real search
-"""
-
 from __future__ import annotations
 
 import math

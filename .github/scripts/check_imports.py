@@ -4,11 +4,7 @@ import ast
 import sys
 from pathlib import Path
 
-<<<<<<< HEAD
-# allowed exports per domain
-=======
-
->>>>>>> 990ff2a868cbe20c10db5ef1ddd27402a1342e78
+# package -> {public name: domains allowed to import it}
 PUBLIC = {
     "engine": {
         "create_problem": {"session"},

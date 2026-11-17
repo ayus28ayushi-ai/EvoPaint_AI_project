@@ -1,7 +1,3 @@
-"""Run the engine alone (no Pygame, no other domain): hill climbing paints a target and saves a picture.
-
-Usage: python -m engine.demo [image_path] [theme_id] [evaluations]
-"""
 from __future__ import annotations
 
 import logging
@@ -19,7 +15,6 @@ log = logging.getLogger("engine.demo")
 
 
 def main(argv: list | None = None) -> None:
-    """Paint for N evaluations and save out/engine_demo.png (target | painting)."""
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     a = list(sys.argv[1:] if argv is None else argv)
     path = a[0] if a else "samples/images/circle_square.png"

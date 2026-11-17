@@ -1,5 +1,3 @@
-"""Small reusable widgets. Each has handle_event(event) -> bool (True = event used) and
-draw(surface, skin, fonts). Colors always come from the active Skin, so themes just work."""
 from __future__ import annotations
 
 import pygame
@@ -10,7 +8,6 @@ from ui.widgets import slider_math as sm
 
 
 class Widget:
-    """Common bits: a rectangle, an optional tooltip and an enabled flag."""
 
     def __init__(self, rect, tooltip: str = ""):
         self.rect = pygame.Rect(rect)
@@ -82,7 +79,6 @@ class Toggle(Widget):
 
 
 class Slider(Widget):
-    """Horizontal slider. Supports linear, log and 'rate-like' log scales (see slider_math)."""
 
     def __init__(self, rect, label, minimum, maximum, value, on_change, step=0.0, scale="linear",
                  is_int=False, tooltip=""):
@@ -139,8 +135,6 @@ class Slider(Widget):
 
 
 class Dropdown(Widget):
-    """Click to open a list below (or above when there is no room). Draw order matters: call
-    draw() for all widgets first, then draw_popup() last so the list floats on top."""
 
     def __init__(self, rect, options: list, value, on_change, tooltip: str = ""):
         super().__init__(rect, tooltip)
@@ -201,7 +195,6 @@ class Dropdown(Widget):
 
 
 class Segmented(Widget):
-    """A row of connected buttons where exactly one is selected."""
 
     def __init__(self, rect, options: list, value, on_change, tooltip: str = ""):
         super().__init__(rect, tooltip)
